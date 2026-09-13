@@ -1,143 +1,286 @@
-# Northwind Sales & Business Performance Analysis
-
-## 📊 Project Overview
-
-This project analyzes sales and business performance using SQL and the Northwind Traders relational dataset.
-
-The goal of the project is to transform raw transactional data into meaningful business insights related to:
-
-- Sales performance
-- Product performance
-- Customer behavior
-- Employee performance
-- Shipping and operational efficiency
-
-The analysis was performed using MySQL.
-
-## 🛠️ Tools & Technologies
-
-- MySQL
-- SQL
-- MySQL Workbench
-- Git & GitHub
-
-- ## 📁 Dataset
-
-The project uses the Northwind Traders relational dataset, which contains transactional and business data across multiple related tables.
-
-### Main Tables
-
-- **Customers** — customer information and location
-- **Orders** — order dates, employees, shipping details, and freight
-- **Order Details** — products, quantities, prices, and discounts
-- **Products** — product information and categories
-- **Categories** — product category information
-- **Employees** — employee information and roles
-- **Shippers** — shipping company information
-
-The dataset was imported into MySQL and analyzed using SQL queries designed around practical business questions.
-
-## 🎯 Business Questions
-
-The analysis was designed to answer practical business questions such as:
-
-1. What are the company's total sales, orders, units sold, and average order value?
-2. How does sales performance change over time?
-3. Which months and years generate the highest revenue?
-4. Which products generate the most revenue?
-5. Which product categories perform best?
-6. Who are the highest-value customers?
-7. Which customers place orders most frequently?
-8. Which employees generate the most sales?
-9. Which shipping company handles the highest order volume?
-10. What is the average shipping time?
-11. What percentage of orders are shipped late?
-12. Which shipping company has the highest late-delivery rate?
-13. Which customers have never placed an order?
-14. Which products have no recorded orders?
-
-## 🧠 SQL Skills Demonstrated
-
-This project demonstrates practical SQL techniques used for business analysis:
-
-- SELECT, WHERE and ORDER BY
-- Aggregate Functions
-- GROUP BY and HAVING
-- INNER JOIN
-- LEFT JOIN
-- CASE WHEN
-- Subqueries
-- Common Table Expressions (CTEs)
-- Window Functions
-- RANK()
-- LAG()
-- Date Functions
-- Calculating business KPIs
-- Percentage and growth calculations
-- Multi-table relational analysis
-
-- ## 🔍 Key Business Insights
-
-### Sales Performance
-
-- Total sales generated: **$1,265,793.04**
-- Total orders analyzed: **830**
-- Total units sold: **51,315**
-- Average order value: **$1,525.05**
-
-### Shipping Performance
-
-- **Federal Shipping** had the lowest late-delivery rate at **3.61%**.
-- **United Package** handled the highest number of shipped orders (**315**).
-- **United Package** also had the highest late-delivery rate at **5.08%**.
-- Overall, **37 out of 809 shipped orders** were late, resulting in a **4.57% late-order rate**.
-
-### Customer Analysis
-
-- **2 customers** had no recorded orders.
-- Customer order frequency was analyzed to identify repeat customers and high-value customers.
-
-- ## 💡 Business Recommendations
-
-Based on the analysis, the following actions could help improve business performance:
-
-1. **Monitor shipping reliability**  
-   Investigate the higher late-delivery rate of United Package, especially because it handles the highest shipping volume.
-
-2. **Focus on high-value customers**  
-   Identify customers with high revenue and repeat purchases and develop strategies to improve retention.
-
-3. **Investigate low-performing products**  
-   Analyze products with low sales or no recorded orders to determine whether they should be promoted, repriced, or discontinued.
-
-4. **Track sales trends**  
-   Monitor monthly and yearly sales patterns to identify periods of strong or weak demand.
-
-5. **Evaluate employee performance**  
-   Use employee-level sales analysis to identify top performers and understand differences in sales contribution.
+\# Northwind Sales Analytics — SQL
 
 
-   ## 📂 Project Structure
 
-```text
+A business-focused SQL analytics project using the Northwind Traders dataset and MySQL.
+
+
+
+\## Project Overview
+
+
+
+This project analyzes sales, customers, products, employees, categories, and shipping performance using MySQL.
+
+
+
+The goal is to transform transactional data into meaningful business insights that can support sales and operational decision-making.
+
+
+
+\## Business Objectives
+
+
+
+The analysis focuses on:
+
+
+
+\- Understanding overall sales performance
+
+\- Identifying top-performing products and categories
+
+\- Analyzing sales by country and customer
+
+\- Evaluating employee sales performance
+
+\- Understanding monthly and yearly sales trends
+
+\- Analyzing shipping performance
+
+\- Identifying late shipments
+
+\- Measuring the impact of discounts
+
+\- Supporting data-driven business decisions
+
+
+
+\## Dataset
+
+
+
+The project uses the Northwind Traders sample database containing information about:
+
+
+
+\- Customers
+
+\- Orders
+
+\- Order Details
+
+\- Products
+
+\- Categories
+
+\- Employees
+
+\- Shippers
+
+
+
+The dataset contains historical transactional sales data from 2013 to 2015.
+
+
+
+\## Database Structure
+
+
+
+| Table | Description |
+
+|---|---|
+
+| customers | Customer and location information |
+
+| orders | Order dates, customers, employees and shipping information |
+
+| order\_details | Products, quantities, prices and discounts for each order |
+
+| products | Product information and prices |
+
+| categories | Product category information |
+
+| employees | Sales employee information |
+
+| shippers | Shipping company information |
+
+
+
+\## SQL Analysis
+
+
+
+The project includes SQL analysis for:
+
+
+
+1\. Sales by Year
+
+2\. Sales by Country
+
+3\. Top Customers by Sales
+
+4\. Top Products by Sales
+
+5\. Sales by Product Category
+
+6\. Sales by Employee
+
+7\. Sales by Shipper
+
+8\. Monthly Sales Trends
+
+9\. Shipping Performance
+
+10\. Late Shipment Analysis
+
+11\. Discount Impact Analysis
+
+
+
+\## Key SQL Concepts Used
+
+
+
+This project demonstrates practical use of:
+
+
+
+\- SELECT
+
+\- WHERE
+
+\- GROUP BY
+
+\- ORDER BY
+
+\- HAVING
+
+\- Aggregate Functions
+
+\- CASE
+
+\- JOIN
+
+\- COUNT
+
+\- SUM
+
+\- AVG
+
+\- ROUND
+
+\- LIMIT
+
+\- Date Functions
+
+\- DATEDIFF
+
+\- YEAR
+
+\- MONTH
+
+\- Foreign Keys
+
+\- Indexes
+
+
+
+\## Business Insights
+
+
+
+The analysis provides insights such as:
+
+
+
+\- Which years generated the highest sales
+
+\- Which countries contributed the most revenue
+
+\- Which products generated the highest sales
+
+\- Which categories performed best
+
+\- Which customers generated the most revenue
+
+\- Which employees handled the highest sales volume
+
+\- How sales changed month by month
+
+\- Average shipping time
+
+\- Percentage of late shipments
+
+\- Overall discount impact on sales
+
+
+
+\## Project Structure
+
+
+
 northwind-sales-analytics-sql/
+
 │
-├── README.md
-│
+
 ├── sql/
-│   └── Northwind_Traders_Corrected_MySQL.sql
-│
-├── data/
-│   └── README.md
-│
-├── insights/
-│   └── business_insights.md
-│
-└── screenshots/
-    └── README.md
 
-## 👩‍💻 Project Purpose
+│   └── Northwind\_Traders\_Corrected\_MySQL.sql
 
-This project was created as a portfolio project to demonstrate practical SQL and business analysis skills for entry-level Data Analyst roles.
+│
 
-The focus is on turning relational business data into actionable insights using SQL.
+└── README.md
+
+
+
+\## Tools \& Technologies
+
+
+
+\- MySQL
+
+\- MySQL Workbench
+
+\- SQL
+
+\- Git
+
+\- GitHub
+
+
+
+\## Project Workflow
+
+
+
+Northwind Dataset
+
+&#x20;      ↓
+
+Database \& Tables
+
+&#x20;      ↓
+
+Data Loading
+
+&#x20;      ↓
+
+Relationships \& Indexes
+
+&#x20;      ↓
+
+SQL Analysis
+
+&#x20;      ↓
+
+Business Insights
+
+
+
+\## Author
+
+
+
+Shivani
+
+
+
+B.Tech Information Technology
+
+
+
+Aspiring Data Analyst
+
