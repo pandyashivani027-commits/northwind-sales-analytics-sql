@@ -1,3 +1,15 @@
+-- ============================================================
+-- NORTHWIND SALES & BUSINESS PERFORMANCE ANALYSIS
+-- ============================================================
+-- Portfolio Project: Data Analyst
+-- Database: MySQL
+-- Dataset: Northwind Traders
+--
+-- Objective:
+-- Analyze sales, products, customers, employees, and
+-- shipping performance to generate actionable business insights.
+-- ============================================================
+
 -- Corrected Northwind Traders MySQL import
 DROP DATABASE IF EXISTS retail_sales_analytics;
 CREATE DATABASE retail_sales_analytics;
