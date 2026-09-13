@@ -3304,6 +3304,229 @@ ALTER TABLE order_details ADD CONSTRAINT fk_details_order FOREIGN KEY (orderID) 
 ALTER TABLE order_details ADD CONSTRAINT fk_details_product FOREIGN KEY (productID) REFERENCES products(productID);
 SET FOREIGN_KEY_CHECKS=1;
 CREATE INDEX idx_orders_customer ON orders(customerID);
+
+-- ============================================================
+-- 1. BUSINESS KPIs
+-- ============================================================
+SELECT
+    ROUND(SUM(od.unitPrice * od.quantity * (1 - od.discount)), 2) AS total_sales,
+    COUNT(DISTINCT o.orderID) AS total_orders,
+    SUM(od.quantity) AS total_units_sold,
+    ROUND(
+        SUM(od.unitPrice * od.quantity * (1 - od.discount))
+        / COUNT(DISTINCT o.orderID),
+        2
+    ) AS average_order_value
+FROM orders o
+JOIN order_details od
+    ON o.orderID = od.orderID;
+
+-- 2. SALES BY YEAR
+
+SELECT
+    YEAR(o.orderDate) AS sales_year,
+    ROUND(SUM(od.unitPrice * od.quantity * (1 - od.discount)), 2) AS total_sales,
+    COUNT(DISTINCT o.orderID) AS total_orders
+FROM orders o
+JOIN order_details od
+    ON o.orderID = od.orderID
+GROUP BY YEAR(o.orderDate)
+ORDER BY sales_year;
+
+-- 3. SALES BY COUNTRY
+
+SELECT
+    c.country,
+    ROUND(SUM(od.unitPrice * od.quantity * (1 - od.discount)), 2) AS total_sales,
+    COUNT(DISTINCT o.orderID) AS total_orders
+FROM customers c
+JOIN orders o
+    ON c.customerID = o.customerID
+JOIN order_details od
+    ON o.orderID = od.orderID
+GROUP BY c.country
+ORDER BY total_sales DESC;
+
+-- 4. TOP 10 CUSTOMERS BY SALES
+
+SELECT
+    c.customerID,
+    c.companyName,
+    c.country,
+    ROUND(SUM(od.unitPrice * od.quantity * (1 - od.discount)), 2) AS total_sales
+FROM customers c
+JOIN orders o
+    ON c.customerID = o.customerID
+JOIN order_details od
+    ON o.orderID = od.orderID
+GROUP BY
+    c.customerID,
+    c.companyName,
+    c.country
+ORDER BY total_sales DESC
+LIMIT 10;
+
+-- 5. TOP 10 PRODUCTS BY SALES
+
+SELECT
+    p.productID,
+    p.productName,
+    ROUND(SUM(od.unitPrice * od.quantity * (1 - od.discount)), 2) AS total_sales,
+    SUM(od.quantity) AS total_quantity_sold
+FROM products p
+JOIN order_details od
+    ON p.productID = od.productID
+GROUP BY
+    p.productID,
+    p.productName
+ORDER BY total_sales DESC
+LIMIT 10;
+
+-- 6. SALES BY PRODUCT CATEGORY
+
+SELECT
+    c.categoryID,
+    c.categoryName,
+    ROUND(SUM(od.unitPrice * od.quantity * (1 - od.discount)), 2) AS total_sales,
+    SUM(od.quantity) AS total_quantity_sold
+FROM categories c
+JOIN products p
+    ON c.categoryID = p.categoryID
+JOIN order_details od
+    ON p.productID = od.productID
+GROUP BY
+    c.categoryID,
+    c.categoryName
+ORDER BY total_sales DESC;
+
+-- 7. SALES BY EMPLOYEE
+
+SELECT
+    e.employeeID,
+    e.employeeName,
+    e.title,
+    ROUND(SUM(od.unitPrice * od.quantity * (1 - od.discount)), 2) AS total_sales,
+    COUNT(DISTINCT o.orderID) AS total_orders
+FROM employees e
+JOIN orders o
+    ON e.employeeID = o.employeeID
+JOIN order_details od
+    ON o.orderID = od.orderID
+GROUP BY
+    e.employeeID,
+    e.employeeName,
+    e.title
+ORDER BY total_sales DESC;
+
+-- 8. SALES BY SHIPPER
+
+SELECT
+    s.shipperID,
+    s.companyName AS shipper_name,
+    ROUND(SUM(od.unitPrice * od.quantity * (1 - od.discount)), 2) AS total_sales,
+    COUNT(DISTINCT o.orderID) AS total_orders
+FROM shippers s
+JOIN orders o
+    ON s.shipperID = o.shipperID
+JOIN order_details od
+    ON o.orderID = od.orderID
+GROUP BY
+    s.shipperID,
+    s.companyName
+ORDER BY total_sales DESC;
+
+-- 9. SALES BY CATEGORY
+
+SELECT
+    c.categoryID,
+    c.categoryName,
+    ROUND(SUM(od.unitPrice * od.quantity * (1 - od.discount)), 2) AS total_sales,
+    SUM(od.quantity) AS units_sold
+FROM categories c
+JOIN products p
+    ON c.categoryID = p.categoryID
+JOIN order_details od
+    ON p.productID = od.productID
+GROUP BY
+    c.categoryID,
+    c.categoryName
+ORDER BY total_sales DESC;
+
+-- 10. SALES BY CUSTOMER
+
+SELECT
+    c.customerID,
+    c.companyName,
+    c.country,
+    ROUND(SUM(od.unitPrice * od.quantity * (1 - od.discount)), 2) AS total_sales,
+    COUNT(DISTINCT o.orderID) AS total_orders
+FROM customers c
+JOIN orders o
+    ON c.customerID = o.customerID
+JOIN order_details od
+    ON o.orderID = od.orderID
+GROUP BY
+    c.customerID,
+    c.companyName,
+    c.country
+ORDER BY total_sales DESC
+LIMIT 10;
+
+-- 11. MONTHLY SALES TREND
+
+SELECT
+    YEAR(o.orderDate) AS sales_year,
+    MONTH(o.orderDate) AS sales_month,
+    ROUND(SUM(od.unitPrice * od.quantity * (1 - od.discount)), 2) AS total_sales,
+    COUNT(DISTINCT o.orderID) AS total_orders
+FROM orders o
+JOIN order_details od
+    ON o.orderID = od.orderID
+GROUP BY
+    YEAR(o.orderDate),
+    MONTH(o.orderDate)
+ORDER BY
+    sales_year,
+    sales_month;
+
+-- 12. SHIPPING PERFORMANCE
+
+SELECT
+    COUNT(*) AS total_orders,
+    COUNT(shippedDate) AS shipped_orders,
+    ROUND(AVG(DATEDIFF(shippedDate, orderDate)), 2) AS avg_shipping_days,
+    MAX(DATEDIFF(shippedDate, orderDate)) AS max_shipping_days
+FROM orders;
+
+-- 13. LATE SHIPMENT ANALYSIS
+
+SELECT
+    COUNT(*) AS total_orders,
+    SUM(CASE
+        WHEN shippedDate > requiredDate THEN 1
+        ELSE 0
+    END) AS late_orders,
+    ROUND(
+        SUM(CASE
+            WHEN shippedDate > requiredDate THEN 1
+            ELSE 0
+        END) * 100.0 / COUNT(*),
+        2
+    ) AS late_shipment_percentage
+FROM orders;
+
+-- 14. DISCOUNT IMPACT ANALYSIS
+
+SELECT
+    ROUND(SUM(od.unitPrice * od.quantity), 2) AS gross_sales,
+    ROUND(SUM(od.unitPrice * od.quantity * od.discount), 2) AS discount_amount,
+    ROUND(SUM(od.unitPrice * od.quantity * (1 - od.discount)), 2) AS net_sales,
+    ROUND(
+        SUM(od.unitPrice * od.quantity * od.discount) * 100.0
+        / SUM(od.unitPrice * od.quantity),
+        2
+    ) AS discount_percentage
+FROM order_details od;
 CREATE INDEX idx_orders_employee ON orders(employeeID);
 CREATE INDEX idx_orders_shipper ON orders(shipperID);
 CREATE INDEX idx_order_details_product ON order_details(productID);
